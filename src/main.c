@@ -1,5 +1,8 @@
 #include <SDL2/SDL.h>
-#include "main.h"
+#include "init.h"
+#include "cleanup.h"
+#include "events.h"
+#include "render.h"
 
 /**
  * main - Entry point of the program
@@ -10,14 +13,19 @@
  */
 int main(int argc, char *argv[])
 {
-	(void)argc;
-	(void)argv;
+    (void)argc;
+    (void)argv;
 
-	if (init_sdl() != 0)
-        return (1);
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
 
-	event_loop();
-	cleanup();
+    if (init_sdl(&window, &renderer) != 0)
+    {
+        return 1;
+    }
 
-	return (0);
+    event_loop(renderer);
+    cleanup(renderer, window);
+
+    return 0;
 }

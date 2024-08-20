@@ -3,6 +3,7 @@
 
 /**
  * render - Renders the current state of the game
+ * @renderer: Pointer to SDL_Renderer used for rendering
  */
 
 void render(SDL_Renderer *renderer)
