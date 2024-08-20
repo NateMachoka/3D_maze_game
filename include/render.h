@@ -3,4 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-#endif /* RENDER_H */
+void render(SDL_Renderer *renderer);
+
+#endif // RENDER_H

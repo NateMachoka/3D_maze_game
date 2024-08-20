@@ -3,4 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-#endif /* CLEANUP_H */
+void cleanup(SDL_Renderer *renderer, SDL_Window *window);
+
+#endif // CLEANUP_H

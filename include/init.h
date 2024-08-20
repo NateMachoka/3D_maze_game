@@ -1,9 +1,9 @@
 #ifndef INIT_H
 #define INIT_H
 
-#include <SDL2/SDL.h>
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 
-int initialize(SDL_Window **window, SDL **renderer);
+int init_sdl(void);
 
-
-#endif
+#endif /* INIT_H */

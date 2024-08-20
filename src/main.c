@@ -10,14 +10,14 @@
  */
 int main(int argc, char *argv[])
 {
-    // Initialization and setup code
-    if (init_sdl() != 0)
+	(void)argc;
+	(void)argv;
+
+	if (init_sdl() != 0)
         return (1);
 
-    // Main event loop
-    event_loop();
+	event_loop();
+	cleanup();
 
-    // Cleanup and exit
-    cleanup();
-    return (0);
+	return (0);
 }

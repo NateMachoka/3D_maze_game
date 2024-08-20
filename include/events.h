@@ -1,7 +1,6 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include <SDL2/SDL.h>
-
+void event_loop(void);
 
 #endif /* EVENTS_H */
