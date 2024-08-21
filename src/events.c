@@ -2,6 +2,7 @@
 #include "events.h"
 #include "render.h"
 #include "player.h"
+#include "maze.h"
 
 extern int maze[MAZE_HEIGHT][MAZE_WIDTH];
 
