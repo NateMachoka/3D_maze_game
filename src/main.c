@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
-	const int tile_size = 50; // Size of each tile in pixels
+	const int tile_size = 10; // Size of each tile in pixels
 	int maze[MAZE_HEIGHT][MAZE_WIDTH];
 
 // Initialize the maze
@@ -29,9 +29,12 @@ int main(int argc, char *argv[])
 	{
 		return (1);
 	}
+	// Initialize the maze
+	generate_maze(maze, MAZE_WIDTH, MAZE_HEIGHT);
+
 	Player player;
 	SDL_Color player_color = {255, 0, 0, 255}; // Red
-	init_player(&player, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, tile_size, tile_size, player_color);
+	init_player(&player, tile_size, tile_size, tile_size, tile_size, player_color);
 
 	event_loop(renderer, &player, maze, tile_size);
 	cleanup(renderer, window);
