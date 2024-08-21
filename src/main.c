@@ -24,7 +24,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    event_loop(renderer);
+    Player player;
+    SDL_Color player_color = {255, 0, 0, 255};
+    init_player(&player, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 25, player_color);
+
+    event_loop(renderer, &player);
     cleanup(renderer, window);
 
     return 0;
