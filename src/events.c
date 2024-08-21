@@ -3,11 +3,13 @@
 #include "render.h"
 #include "player.h"
 
+extern int maze[MAZE_HEIGHT][MAZE_WIDTH];
+
 /**
  * event_loop - Handles the main event loop of the program
  * @renderer: Pointer to SDL_Renderer used for rendering
  */
-void event_loop(SDL_Renderer *renderer, Player *player)
+void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
 {
     int running;
     SDL_Event event;
@@ -42,6 +44,6 @@ void event_loop(SDL_Renderer *renderer, Player *player)
 	{
 		move_player(player, player->pos.x + 5, player->pos.y);
         }
-	render(renderer, player);
+	render(renderer, maze, MAZE_WIDTH, MAZE_HEIGHT, tile_size, player);
     }
 }

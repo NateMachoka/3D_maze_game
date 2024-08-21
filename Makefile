@@ -4,7 +4,7 @@ CFLAGS = -Wall -Werror -Wextra -Iinclude
 LDFLAGS = -lSDL2
 
 # Source and object files
-SRCS = src/main.c src/init.c src/events.c src/render.c src/cleanup.c src/player.c
+SRCS = src/main.c src/init.c src/events.c src/render.c src/cleanup.c src/player.c src/maze.c
 OBJS = $(SRCS:.c=.o)
 
 # Output executable

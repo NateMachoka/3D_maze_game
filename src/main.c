@@ -3,7 +3,7 @@
 #include "cleanup.h"
 #include "events.h"
 #include "render.h"
-
+#include "maze.h"
 /**
  * main - Entry point of the program
  * @argc: Number of command-line arguments
@@ -13,23 +13,27 @@
  */
 int main(int argc, char *argv[])
 {
-    (void)argc;
-    (void)argv;
+	(void)argc;
+	(void)argv;
 
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
+	SDL_Window *window = NULL;
+	SDL_Renderer *renderer = NULL;
+	const int tile_size = 50; // Size of each tile in pixels
+	int maze[MAZE_HEIGHT][MAZE_WIDTH];
 
-    if (init_sdl(&window, &renderer) != 0)
-    {
-        return 1;
-    }
+// Initialize the maze
+	init_maze(maze);
 
-    Player player;
-    SDL_Color player_color = {255, 0, 0, 255};
-    init_player(&player, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 25, 25, player_color);
+	if (init_sdl(&window, &renderer) != 0)
+	{
+		return (1);
+	}
+	Player player;
+	SDL_Color player_color = {255, 0, 0, 255}; // Red
+	init_player(&player, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, tile_size, tile_size, player_color);
 
-    event_loop(renderer, &player);
-    cleanup(renderer, window);
+	render(renderer, maze, MAZE_WIDTH, MAZE_HEIGHT, tile_size, &player);
+	cleanup(renderer, window);
 
-    return 0;
+	return (0);
 }
