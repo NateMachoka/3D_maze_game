@@ -1,0 +1,11 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+#define TILE_SIZE 50
+
+#define MAZE_WIDTH (WINDOW_WIDTH / TILE_SIZE)
+#define MAZE_HEIGHT (WINDOW_HEIGHT / TILE_SIZE)
+
+#endif // CONFIG_H

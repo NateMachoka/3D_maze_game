@@ -1,3 +1,4 @@
+#include "config.h"
 #include <SDL2/SDL.h>
 #include "init.h"
 #include "cleanup.h"
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 	SDL_Color player_color = {255, 0, 0, 255}; // Red
 	init_player(&player, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, tile_size, tile_size, player_color);
 
-	render(renderer, maze, MAZE_WIDTH, MAZE_HEIGHT, tile_size, &player);
+	event_loop(renderer, &player, maze, tile_size);
 	cleanup(renderer, window);
 
 	return (0);
