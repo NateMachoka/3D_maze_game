@@ -4,9 +4,7 @@
 #include <stdbool.h>
 #include "config.h"
 
-#define MAZE_WIDTH 50
-#define MAZE_HEIGHT 50
-#define WALL_THICKNESS 2
+
 
 // Directions for moving in the maze
 typedef struct {

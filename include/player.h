@@ -2,7 +2,16 @@
 #define PLAYER_H
 
 #include <SDL2/SDL.h>
-#include "position.h"
+/**
+ * Position - Represents a 2D position in the game world.
+ * @x: X coordinate
+ * @y: Y coordinate
+ */
+typedef struct {
+    int x; // X coordinate
+    int y; // Y coordinate
+} Position;
+
 /**
  * Player - Represents a player in the game
  * @pos: Position of the player
