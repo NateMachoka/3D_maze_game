@@ -5,10 +5,6 @@
 #include <time.h>
 #include "maze.h"
 
-// Constants for maze dimensions (set these based on your needs)
-#define MAZE_WIDTH 50
-#define MAZE_HEIGHT 50
-#define WALL_THICKNESS 2
 
 /**
  * generate_maze - Generates a maze using a randomized depth-first search algorithm

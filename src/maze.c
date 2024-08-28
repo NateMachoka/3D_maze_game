@@ -55,7 +55,7 @@ void shuffle_directions(Point *dirs, int n)
  */
 void generate_maze(int maze[][MAZE_WIDTH], int x, int y, int width, int height)
 {
-	maze[y][x] = 0; // Set the current point as PATH
+	maze[y][x] = 0;
 
 	Point shuffled_dirs[4];
 	for (int i = 0; i < 4; i++)
