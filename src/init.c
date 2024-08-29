@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "init.h"
 #include <stdio.h>
 
@@ -18,7 +19,7 @@ int init_sdl(SDL_Window **window, SDL_Renderer **renderer)
     }
 
     *window = SDL_CreateWindow(
-        "3D Maze Game",
+        "The Maze",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH, WINDOW_HEIGHT,
@@ -44,5 +45,19 @@ int init_sdl(SDL_Window **window, SDL_Renderer **renderer)
         return 1;
     }
 
+    return 0;
+}
+/**
+ * init_audio - Initializes SDL_mixer for audio
+ *
+ * Return: 0 on success, 1 on error
+ */
+int init_audio()
+{
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        fprintf(stderr, "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return 1;
+    }
     return 0;
 }

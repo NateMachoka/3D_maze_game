@@ -1,10 +1,12 @@
 #include "config.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "init.h"
 #include "cleanup.h"
 #include "events.h"
 #include "render.h"
 #include "maze.h"
+#include "sound.h"
 
 /**
  * main - Entry point of the program
@@ -33,6 +35,16 @@ int main(int argc, char *argv[])
         return (1);
     }
 
+    // Initialize SDL_mixer for audio
+    if (init_audio() != 0)
+    {
+        cleanup(renderer, window);
+        return 1;
+    }
+
+    // Play the start sound
+    play_sound("/home/essy/Downloads/mixkit-aggressive-beast-roar-13.wav");
+
     // Initialize player
     Player player;
     SDL_Color player_color = {255, 0, 0, 255}; // Red
@@ -41,8 +53,12 @@ int main(int argc, char *argv[])
     // Start the event loop
     event_loop(renderer, &player, maze, tile_size);
 
+    // Play the congrats sound after completing the event loop
+    play_sound("/home/essy/Downloads/applause3.wav");
+
     // Clean up resources before exiting
     cleanup(renderer, window);
+    Mix_CloseAudio(); // Close SDL_mixer
 
     return (0);
 }

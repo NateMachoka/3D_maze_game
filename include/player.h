@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SDL2/SDL.h>
+#include "config.h"
 /**
  * Position - Represents a 2D position in the game world.
  * @x: X coordinate
@@ -27,6 +28,7 @@ typedef struct {
 
 void init_player(Player *player, int x, int y, int w, int h, SDL_Color color);
 void draw_player(SDL_Renderer *renderer, const Player *player);
-void move_player(Player *player, int x, int y);
+void move_player(Player *player, int x, int y, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size);
+
 
 #endif //PLAYER_H

@@ -27,24 +27,24 @@ void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MA
                 running = 0;
             }
         }
-	state = SDL_GetKeyboardState(NULL);
+        state = SDL_GetKeyboardState(NULL);
 
-	if (state[SDL_SCANCODE_UP])
-	{
-		move_player(player, player->pos.x, player->pos.y - 5);
+        if (state[SDL_SCANCODE_UP])
+        {
+            move_player(player, player->pos.x, player->pos.y - 5, maze, tile_size);
         }
         if (state[SDL_SCANCODE_DOWN])
-	{
-		move_player(player, player->pos.x, player->pos.y + 5);
+        {
+            move_player(player, player->pos.x, player->pos.y + 5, maze, tile_size);
         }
         if (state[SDL_SCANCODE_LEFT])
-	{
-		move_player(player, player->pos.x - 5, player->pos.y);
+        {
+            move_player(player, player->pos.x - 5, player->pos.y, maze, tile_size);
         }
         if (state[SDL_SCANCODE_RIGHT])
-	{
-		move_player(player, player->pos.x + 5, player->pos.y);
+        {
+            move_player(player, player->pos.x + 5, player->pos.y, maze, tile_size);
         }
-	render(renderer, maze, MAZE_WIDTH, MAZE_HEIGHT, tile_size, player);
+        render(renderer, maze, MAZE_WIDTH, MAZE_HEIGHT, tile_size, player);
     }
 }
