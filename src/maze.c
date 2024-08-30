@@ -33,7 +33,13 @@ void shuffle_directions(Point *dirs, int n) {
  * @x: The current x-coordinate.
  * @y: The current y-coordinate.
  */
-void carve_passages(int maze[MAZE_HEIGHT][MAZE_WIDTH], int x, int y) {
+void carve_passages(int maze[MAZE_HEIGHT][MAZE_WIDTH], int x, int y)
+{
+    // Base case: Stop if we have reached the bottom-right corner
+    if (x == MAZE_WIDTH - 2 && y == MAZE_HEIGHT - 2) {
+        return;
+    }
+
     const Point directions[4] = {
         {0, 1},   // Right
         {1, 0},   // Down

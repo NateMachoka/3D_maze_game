@@ -18,12 +18,16 @@ typedef struct {
  * @pos: Position of the player
  * @rect: SDL_Rect structure representing the player's position and size
  * @color: SDL_Color structure representing the player's color
+ * @direction: player's direction vector
+ * @plane: camera plane for 3D rendering
  */
 
 typedef struct {
 	Position pos;
 	SDL_Rect rect; // position and size of player
-	SDL_Color color; //player's color
+	SDL_Color color;
+	SDL_Point direction;
+	SDL_Point plane;
 }Player;
 
 void init_player(Player *player, int x, int y, int w, int h, SDL_Color color);

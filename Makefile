@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -Iinclude
-LDFLAGS = -lSDL2 -lSDL2_mixer
+LDFLAGS = -lSDL2 -lSDL2_mixer -lm
 
 # Source and object files
 SRCS = src/main.c src/init.c src/events.c src/render.c src/cleanup.c src/player.c src/maze.c src/sound.c

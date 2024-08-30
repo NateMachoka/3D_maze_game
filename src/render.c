@@ -72,8 +72,6 @@ void draw_maze(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int ma
         }
     }
 
-    // Draw the boundary around the maze
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // Blue boundary
     SDL_RenderDrawLine(renderer, 0, 0, maze_width * tile_size, 0); // Top boundary
     SDL_RenderDrawLine(renderer, 0, 0, 0, maze_height * tile_size); // Left boundary
     SDL_RenderDrawLine(renderer, maze_width * tile_size - 1, 0, maze_width * tile_size - 1, maze_height * tile_size); // Right boundary
@@ -100,7 +98,8 @@ void render(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int maze_
  * clear_screen - Clears the screen with a given color
  * @renderer: The SDL renderer to draw with
  */
-void clear_screen(SDL_Renderer *renderer) {
+void clear_screen(SDL_Renderer *renderer)
+{
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
     SDL_RenderClear(renderer); // Clear the screen with the chosen color
 }

@@ -18,6 +18,12 @@ void init_player(Player *player, int x, int y, int w, int h, SDL_Color color)
     player->rect.w = w;
     player->rect.h = h;
     player->color = color;
+
+    player->direction.x = 1;
+    player->direction.y = 0;
+
+    player->plane.x = 0;
+    player->plane.y = 0.66;
 }
 
 /**
