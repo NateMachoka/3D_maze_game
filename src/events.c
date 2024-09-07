@@ -3,20 +3,71 @@
 #include "render.h"
 #include "player.h"
 #include "maze.h"
-
-extern int maze[MAZE_HEIGHT][MAZE_WIDTH];
+#include "config.h"
 
 /**
- * event_loop - Handles the main event loop of the program
- * @renderer: Pointer to SDL_Renderer used for rendering
+ * handle_rotation - Handles player rotation based on key press
+ * @player: Pointer to the Player structure
+ * @state: Array representing the state of all keyboard keys
+ *
+ * Return: nothing
+ */
+void handle_rotation(Player *player, const Uint8 *state)
+{
+	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A])
+	{
+		rotate_player(player, degToRad(-5));
+	}
+
+	if (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D])
+	{
+		rotate_player(player, degToRad(5));
+	}
+}
+
+/**
+ * handle_movement - Handles player movement based on key press
+ * @player: Pointer to the Player structure
+ * @state: Array representing the state of all keyboard keys
+ * @maze: The maze in which the player is moving
+ * @tile_size: The size of each tile in the maze
+ *
+ * Return: nothing
+ */
+void handle_movement(Player *player, const Uint8 *state, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
+{
+/* Initialize player speed */
+	player->speed = 0.0f;
+
+	if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W])
+	{
+		player->speed = 5.0f;
+		move_player(player, maze, tile_size);
+	}
+
+	if (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S])
+	{
+		player->speed = -5.0f;
+		move_player(player, maze, tile_size);
+	}
+}
+
+/**
+ * event_loop - Main event loop handling player movement, rotation, and rendering
+ * @renderer: SDL_Renderer used for rendering the maze and player
+ * @player: Pointer to the Player structure
+ * @maze: The maze in which the player is moving
+ * @tile_size: The size of each tile in the maze
+ *
+ * Return: nothing
  */
 void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
 {
-	int running = 1;
+	int running;
 	SDL_Event event;
 	const Uint8 *state;
-	double move_speed = 0.1; // Player movement speed
-	double rot_speed = 0.05; // Player rotation speed
+
+	running = 1;
 
 	while (running)
 	{
@@ -27,40 +78,13 @@ void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MA
 				running = 0;
 			}
 		}
+
+		/* Get the state of all keyboard keys */
 		state = SDL_GetKeyboardState(NULL);
 
-		if (state[SDL_SCANCODE_UP])
-		{
-			if (maze[(int)(player->pos.y)][(int)(player->pos.x + player->direction.x * move_speed)] == 0)
-				player->pos.x += player->direction.x * move_speed;
-			if (maze[(int)(player->pos.y + player->direction.y * move_speed)][(int)(player->pos.x)] == 0)
-				player->pos.y += player->direction.y * move_speed;
-		}
-		if (state[SDL_SCANCODE_DOWN])
-		{
-			if (maze[(int)(player->pos.y)][(int)(player->pos.x - player->direction.x * move_speed)] == 0)
-				 player->pos.x -= player->direction.x * move_speed;
-			if (maze[(int)(player->pos.y - player->direction.y * move_speed)][(int)(player->pos.x)] == 0)
-				player->pos.y -= player->direction.y * move_speed;
-		}
-		if (state[SDL_SCANCODE_LEFT])
-		{
-			double old_dir_x = player->direction.x;
-			player->direction.x = player->direction.x * cos(-rot_speed) - player->direction.y * sin(-rot_speed);
-			player->direction.y = old_dir_x * sin(-rot_speed) + player->direction.y * cos(-rot_speed);
-			double old_plane_x = player->plane.x;
-			player->plane.x = player->plane.x * cos(-rot_speed) - player->plane.y * sin(-rot_speed);
-			player->plane.y = old_plane_x * sin(-rot_speed) + player->plane.y * cos(-rot_speed);
-		}
-		if (state[SDL_SCANCODE_RIGHT])
-		{
-			double old_dir_x = player->direction.x;
-			player->direction.x = player->direction.x * cos(rot_speed) - player->direction.y * sin(rot_speed);
-			player->direction.y = old_dir_x * sin(rot_speed) + player->direction.y * cos(rot_speed);
-			double old_plane_x = player->plane.x;
-			player->plane.x = player->plane.x * cos(rot_speed) - player->plane.y * sin(rot_speed);
-			player->plane.y = old_plane_x * sin(rot_speed) + player->plane.y * cos(rot_speed);
-		}
-		render(renderer, maze, MAZE_WIDTH, MAZE_HEIGHT, tile_size, player); // Render the maze from the FPS perspective
+		handle_rotation(player, state);
+		handle_movement(player, state, maze, tile_size);
+
+		render(renderer, maze, TILE_SIZE, player);
 	}
 }

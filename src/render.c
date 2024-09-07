@@ -1,105 +1,172 @@
 #include "render.h"
 #include <SDL2/SDL.h>
-#include "player.h"
 #include "maze.h"
+#include "player.h"
+#include "raycasting.h"
 
 /**
- * draw_maze - Draws the maze on the renderer with different thicknesses for walls and paths.
+ * draw_maze - Draws the full maze on the screen.
  * @renderer: Pointer to SDL_Renderer used for rendering.
  * @maze: The 2D array representing the maze.
- * @maze_width: The width of the maze.
- * @maze_height: The height of the maze.
- * @tile_size: The size of each tile.
+ * @tile_size: The size of each tile in the maze.
  */
-void draw_maze(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int maze_width, int maze_height, int tile_size)
+void draw_maze(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
 {
-    int path_size = tile_size;
-    int wall_size = tile_size / 2;
+	int x, y;
 
-    for (int y = 0; y < maze_height; ++y) {
-        for (int x = 0; x < maze_width; ++x) {
-            SDL_Color color;
-            SDL_Rect rect;
+	for (y = 0; y < MAZE_HEIGHT; ++y)
+	{
+		for (x = 0; x < MAZE_WIDTH; ++x)
+		{
+			SDL_Color color;
+			SDL_Rect rect;
 
-            if (maze[y][x] == 1) {
-                // Wall
-                color.r = 0;
-                color.g = 0;
-                color.b = 0;
-                color.a = 255;
+			if (maze[y][x] == 1)
+			{
+				color.r = 0;
+				color.g = 0;
+				color.b = 0;
+				color.a = 255;
+			}
+			else if (maze[y][x] == 2)
+			{
+				color.r = 0;
+				color.g = 255;
+				color.b = 0;
+				color.a = 255;
+			}
+			else if (maze[y][x] == 3)
+			{
+				color.r = 255;
+				color.g = 255;
+				color.b = 0;
+				color.a = 255;
+			}
+			else
+			{
+				color.r = 255;
+				color.g = 255;
+				color.b = 255;
+				color.a = 255;
+			}
+			rect.x = x * tile_size;
+			rect.y = y * tile_size;
+			rect.w = tile_size;
+			rect.h = tile_size;
 
-                rect.x = x * tile_size + (tile_size - wall_size) / 2;
-                rect.y = y * tile_size + (tile_size - wall_size) / 2;
-                rect.w = wall_size;
-                rect.h = wall_size;
-            } else if (x == 1 && y == 1) {
-                // Entry Point
-                color.r = 0;
-                color.g = 255;
-                color.b = 0;
-                color.a = 255;
-
-                rect.x = x * tile_size + (tile_size - path_size) / 2;
-                rect.y = y * tile_size + (tile_size - path_size) / 2;
-                rect.w = path_size;
-                rect.h = path_size;
-            } else if (x == maze_width - 2 && y == maze_height - 2) {
-                // Exit Point
-                color.r = 255;
-                color.g = 0;
-                color.b = 0;
-                color.a = 255;
-
-                rect.x = x * tile_size + (tile_size - path_size) / 2;
-                rect.y = y * tile_size + (tile_size - path_size) / 2;
-                rect.w = path_size;
-                rect.h = path_size;
-            } else {
-                // Path
-                color.r = 255;
-                color.g = 255;
-                color.b = 255;
-                color.a = 255;
-
-                rect.x = x * tile_size;
-                rect.y = y * tile_size;
-                rect.w = path_size;
-                rect.h = path_size;
-            }
-
-            SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-            SDL_RenderFillRect(renderer, &rect);
-        }
-    }
-
-    SDL_RenderDrawLine(renderer, 0, 0, maze_width * tile_size, 0); // Top boundary
-    SDL_RenderDrawLine(renderer, 0, 0, 0, maze_height * tile_size); // Left boundary
-    SDL_RenderDrawLine(renderer, maze_width * tile_size - 1, 0, maze_width * tile_size - 1, maze_height * tile_size); // Right boundary
-    SDL_RenderDrawLine(renderer, 0, maze_height * tile_size - 1, maze_width * tile_size, maze_height * tile_size - 1); // Bottom boundary
+			SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+			SDL_RenderFillRect(renderer, &rect);
+		}
+	}
 }
 
 /**
- * render - Renders the current state of the game
- * @renderer: Pointer to SDL_Renderer used for rendering
- * @maze: The 2D array representing the maze
- * @maze_width: The width of the maze
- * @maze_height: The height of the maze
- * @tile_size: The size of each tile
- * @player: Pointer to the Player object
+ * draw_map - Draws the 2D map on the renderer.
+ * @renderer: Pointer to SDL_Renderer used for rendering.
+ * @maze: The 2D array representing the maze.
+ * @map_x: X position of the map on the screen.
+ * @map_y: Y position of the map on the screen.
+ * @map_tile_size: The size of each tile on the map.
+ * @player_x: Player's X position in the maze.
+ * @player_y: Player's Y position in the maze.
  */
-void render(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int maze_width, int maze_height, int tile_size, Player *player) {
-    clear_screen(renderer);
-    draw_maze(renderer, maze, maze_width, maze_height, tile_size);
-    draw_player(renderer, player);
-    SDL_RenderPresent(renderer);
+void draw_map(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int map_x, int map_y, int map_tile_size, int player_x, int player_y, float player_angle)
+{
+	int x, y;
+
+	for (y = 0; y < MAZE_HEIGHT; ++y)
+	{
+		for (x = 0; x < MAZE_WIDTH; ++x)
+		{
+			SDL_Color color;
+			SDL_Rect rect;
+
+			if (maze[y][x] == 1) /* wall */
+			{
+				color.r = 0;
+				color.g = 0;
+				color.b = 0;
+				color.a = 255;
+			}
+			else
+			{
+				color.r = 255;
+				color.g = 255;
+				color.b = 255;
+				color.a = 255;
+			}
+			rect.x = map_x + (x * map_tile_size);
+			rect.y = map_y + (y * map_tile_size);
+			rect.w = map_tile_size;
+			rect.h = map_tile_size;
+
+			SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+			SDL_RenderFillRect(renderer, &rect);
+		}
+	}
+
+	/* Draw the player on the map */
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_Rect player_rect = {
+		.x = map_x + (player_x * map_tile_size),
+		.y = map_y + (player_y * map_tile_size),
+		.w = map_tile_size,
+		.h = map_tile_size
+	};
+	SDL_RenderFillRect(renderer, &player_rect);
+
+	/* Draw the player's direction */
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_RenderDrawLine(
+		renderer,
+		map_x + (player_x * map_tile_size) + map_tile_size / 2,
+		map_y + (player_y * map_tile_size) + map_tile_size / 2,
+		map_x + (player_x * map_tile_size) + map_tile_size / 2 + cos(player_angle) * map_tile_size / 2,
+		map_y + (player_y * map_tile_size) + map_tile_size / 2 + sin(player_angle) * map_tile_size / 2
+		);
 }
 
 /**
- * clear_screen - Clears the screen with a given color
- * @renderer: The SDL renderer to draw with
+ * render - Renders the current state of the maze and the 2D map.
+ * @renderer: Pointer to SDL_Renderer used for rendering.
+ * @maze: The 2D array representing the maze.
+ * @tile_size: The size of each tile in the full maze.
+ * @player: The player's information (position, direction, etc.).
+ */
+void render(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size, Player *player)
+{
+	int map_tile_size;
+	int screen_width, screen_height, map_width, map_height;
+	int map_x, map_y;
+
+	/* Get screen dimensions */
+	SDL_GetRendererOutputSize(renderer, &screen_width, &screen_height);
+
+	clear_screen(renderer);
+
+	/* Render the 3D view (main view) */
+	cast_rays(renderer, player, maze, tile_size);
+
+	/* Render the 2D map in the top-right corner */
+	map_width = screen_width / 4;
+	map_height = screen_height / 4;
+
+	map_tile_size = (map_width < map_height ? map_width : map_height) / MAZE_WIDTH;
+	map_x = screen_width - (MAZE_WIDTH * map_tile_size) - 10;
+	map_y = 10;
+
+	/* Draw the 2D minimap */
+	draw_map(renderer, maze, map_x, map_y, map_tile_size, player->pos.x / tile_size, player->pos.y / tile_size, player->angle);
+
+	SDL_RenderPresent(renderer);
+}
+
+/**
+ * clear_screen - Clears the screen with a given color.
+ * @renderer: The SDL renderer to draw with.
  */
 void clear_screen(SDL_Renderer *renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
-    SDL_RenderClear(renderer); // Clear the screen with the chosen color
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
 }

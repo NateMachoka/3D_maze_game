@@ -20,8 +20,8 @@ This project is a 3D first-person maze game built using C and SDL2. The game sta
 │   ├── main.c          # Entry point of the application
 │   └── ...             # Additional source files
 ├── include/            # Header files (optional)
-│   └── ...             
-├── assets/             # Game assets (images, sounds, etc.)
+│   └── .. 
+├── assets/            # Game assets (images, sounds, etc.)
 │   └── ...
 ├── build/              # Compiled binaries and object files
 ├── README.md           # Project documentation

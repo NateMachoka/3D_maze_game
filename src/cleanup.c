@@ -8,15 +8,14 @@
  */
 void cleanup(SDL_Renderer *renderer, SDL_Window *window)
 {
-    if (renderer != NULL)
-    {
-        SDL_DestroyRenderer(renderer);
-    }
+	if (renderer != NULL)
+	{
+		SDL_DestroyRenderer(renderer);
+	}
 
-    if (window != NULL)
-    {
-        SDL_DestroyWindow(window);
-    }
-
-    SDL_Quit();
+	if (window != NULL)
+	{
+		SDL_DestroyWindow(window);
+	}
+	SDL_Quit();
 }
