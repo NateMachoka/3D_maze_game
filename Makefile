@@ -1,10 +1,10 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -Iinclude
-LDFLAGS = -lSDL2 -lSDL2_mixer -lm
+LDFLAGS = -lSDL2 -lSDL2_mixer -lSDL2_image -lm
 
 # Source and object files
-SRCS = src/main.c src/init.c src/events.c src/render.c src/cleanup.c src/player.c src/maze.c src/sound.c src/raycasting.c src/create_maze.c
+SRCS = src/main.c src/init.c src/events.c src/render.c src/cleanup.c src/player.c src/maze.c src/sound.c src/raycasting.c src/create_maze.c src/texture_utils.c
 OBJS = $(SRCS:.c=.o)
 
 # Output executable

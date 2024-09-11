@@ -36,7 +36,7 @@ void handle_rotation(Player *player, const Uint8 *state)
  */
 void handle_movement(Player *player, const Uint8 *state, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
 {
-/* Initialize player speed */
+	/* Initialize player speed */
 	player->speed = 0.0f;
 
 	if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W])
@@ -58,10 +58,11 @@ void handle_movement(Player *player, const Uint8 *state, int maze[MAZE_HEIGHT][M
  * @player: Pointer to the Player structure
  * @maze: The maze in which the player is moving
  * @tile_size: The size of each tile in the maze
+ * @wall_texture: Texture to use for rendering the maze walls
  *
  * Return: nothing
  */
-void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
+void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size, SDL_Texture *wall_texture)
 {
 	int running;
 	SDL_Event event;
@@ -85,6 +86,6 @@ void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MA
 		handle_rotation(player, state);
 		handle_movement(player, state, maze, tile_size);
 
-		render(renderer, maze, TILE_SIZE, player);
+		render(renderer, maze, tile_size, player, wall_texture);
 	}
 }
