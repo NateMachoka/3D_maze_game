@@ -5,61 +5,104 @@
 #include "raycasting.h"
 
 /**
+ * is_walkable - Checks if a tile is walkable (not a wall).
+ * @maze: The maze array.
+ * @x: X position of the tile.
+ * @y: Y position of the tile.
+ * Return: 1 if walkable, 0 if not.
+ */
+int is_walkable(int maze[MAZE_HEIGHT][MAZE_WIDTH], int x, int y)
+{
+    if (x < 0 || x >= MAZE_WIDTH || y < 0 || y >= MAZE_HEIGHT)
+        return 0;
+    return maze[y][x] != 1; /* Assuming 1 is a wall */
+}
+
+/**
  * draw_maze - Draws the full maze on the screen.
  * @renderer: Pointer to SDL_Renderer used for rendering.
  * @maze: The 2D array representing the maze.
  * @tile_size: The size of each tile in the maze.
+ * @start_x: X position of the start point.
+ * @start_y: Y position of the start point.
+ * @end_x: X position of the end point.
+ * @end_y: Y position of the end point.
  */
-void draw_maze(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size)
+void draw_maze(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size, int start_x, int start_y, int end_x, int end_y)
 {
-	int x, y;
+    int x, y;
 
-	for (y = 0; y < MAZE_HEIGHT; ++y)
-	{
-		for (x = 0; x < MAZE_WIDTH; ++x)
-		{
-			SDL_Color color;
-			SDL_Rect rect;
+    for (y = 0; y < MAZE_HEIGHT; ++y)
+    {
+        for (x = 0; x < MAZE_WIDTH; ++x)
+        {
+            SDL_Color color;
+            SDL_Rect rect;
 
-			if (maze[y][x] == 1)
-			{
-				color.r = 0;
-				color.g = 0;
-				color.b = 0;
-				color.a = 255;
-			}
-			else if (maze[y][x] == 2)
-			{
-				color.r = 0;
-				color.g = 255;
-				color.b = 0;
-				color.a = 255;
-			}
-			else if (maze[y][x] == 3)
-			{
-				color.r = 255;
-				color.g = 255;
-				color.b = 0;
-				color.a = 255;
-			}
-			else
-			{
-				color.r = 255;
-				color.g = 255;
-				color.b = 255;
-				color.a = 255;
-			}
-			rect.x = x * tile_size;
-			rect.y = y * tile_size;
-			rect.w = tile_size;
-			rect.h = tile_size;
+            /* Set default color for walkable tiles */
+            color.r = 255;
+            color.g = 255;
+            color.b = 255;
+            color.a = 255;
 
-			SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-			SDL_RenderFillRect(renderer, &rect);
-		}
-	}
+            if (maze[y][x] == 1)  /* Wall */
+            {
+                color.r = 0;
+                color.g = 0;
+                color.b = 0;
+                color.a = 255;
+            }
+            else if (x == start_x && y == start_y)  /* Start point */
+            {
+                color.r = 0;
+                color.g = 255;
+                color.b = 0;
+                color.a = 255;
+            }
+            else if (x == end_x && y == end_y)  /* End point */
+            {
+                color.r = 255;
+                color.g = 0;
+                color.b = 0;
+                color.a = 255;
+            }
+            else
+            {
+                /* Check surroundings to determine if it's a junction or corridor */
+                int walkable_neighbors = 0;
+
+                if (is_walkable(maze, x + 1, y)) walkable_neighbors++;
+                if (is_walkable(maze, x - 1, y)) walkable_neighbors++;
+                if (is_walkable(maze, x, y + 1)) walkable_neighbors++;
+                if (is_walkable(maze, x, y - 1)) walkable_neighbors++;
+
+                if (walkable_neighbors > 2)  /* Junction */
+                {
+                    color.r = 255;
+                    color.g = 255;
+                    color.b = 0;  /* Yellow for junction */
+                    color.a = 255;
+                }
+                else if (walkable_neighbors == 2)  /* Corridor */
+                {
+                    color.r = 200;
+                    color.g = 200;
+                    color.b = 200;  /* Light gray for corridor */
+                    color.a = 255;
+                }
+            }
+
+            /* Draw the tile */
+            rect.x = x * tile_size;
+            rect.y = y * tile_size;
+            rect.w = tile_size;
+            rect.h = tile_size;
+
+            SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+            SDL_RenderFillRect(renderer, &rect);
+        }
+    }
 }
-
 /**
  * draw_map - Draws the 2D map on the renderer.
  * @renderer: Pointer to SDL_Renderer used for rendering.
@@ -152,10 +195,10 @@ void render(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_
 	map_height = screen_height / 4;
 
 	map_tile_size = (map_width < map_height ? map_width : map_height) / MAZE_WIDTH;
-	map_x = screen_width - (MAZE_WIDTH * map_tile_size) - 10;
-	map_y = 10;
 
-	/* Draw the 2D minimap */
+	map_x = screen_width - (map_width) - 10;
+	map_y = 10;	/* Draw the 2D minimap */
+
 	draw_map(renderer, maze, map_x, map_y, map_tile_size, player->pos.x / tile_size, player->pos.y / tile_size, player->angle);
 
 	SDL_RenderPresent(renderer);
