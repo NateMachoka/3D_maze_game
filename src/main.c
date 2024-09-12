@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "raycasting.h"
 #include "texture_utils.h"
+#include "timer.h"
 
 /**
  * main - Entry point of the program
@@ -38,6 +39,20 @@ int main(int argc, char *argv[])
         return (1);
     }
 
+    /* Initialize SDL_ttf and load font */
+    if (init_ttf() != 0)
+    {
+        cleanup(renderer, window);
+        return 1;
+    }
+    font = load_font("assets/mesy_guako.ttf", 16);
+    if (font == NULL)
+    {
+        cleanup(renderer, window);
+        return 1;
+    }
+    textColor = (SDL_Color){255, 255, 255, 255}; // White color
+
     /* Initialize SDL_mixer for audio */
     if (init_audio() != 0)
     {
@@ -45,8 +60,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    /* Load Mayan_wall texture */
-    SDL_Texture *wall_texture = load_texture(renderer, "/home/essy/Betty/3D_maze_game/assets/Mayan_wall");
+    /* Load textures */
+    SDL_Texture *wall_texture = load_texture(renderer, "assets/Mayan_wall");
     if (wall_texture == NULL)
     {
         fprintf(stderr, "Error loading wall texture\n");
@@ -59,12 +74,14 @@ int main(int argc, char *argv[])
     SDL_Color player_color = {255, 0, 255, 255};
     init_player(&player, tile_size, tile_size, tile_size, tile_size, player_color);
 
+    /* Start the game and timer */
+    start_game();
+
     event_loop(renderer, &player, maze, tile_size, wall_texture);
 
     /* Clean up resources before exiting */
-    SDL_DestroyTexture(wall_texture); // Destroy texture
+    SDL_DestroyTexture(wall_texture);
     cleanup(renderer, window);
-    Mix_CloseAudio();
 
     return (0);
 }

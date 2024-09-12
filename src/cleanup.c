@@ -1,5 +1,8 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include "cleanup.h"
+#include "init.h"
 
 /**
  * cleanup - Cleans up resources and quits SDL
@@ -17,5 +20,15 @@ void cleanup(SDL_Renderer *renderer, SDL_Window *window)
 	{
 		SDL_DestroyWindow(window);
 	}
+
+	/* Close audio if initialized */
+	Mix_CloseAudio();
+
+	/* Close font and quit TTF if initialized */
+	if (font != NULL) {
+		TTF_CloseFont(font);
+	}
+	TTF_Quit();
+
 	SDL_Quit();
 }

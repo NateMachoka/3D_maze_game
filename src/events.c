@@ -59,6 +59,7 @@ void handle_movement(Player *player, const Uint8 *state, int maze[MAZE_HEIGHT][M
  * @maze: The maze in which the player is moving
  * @tile_size: The size of each tile in the maze
  * @wall_texture: Texture to use for rendering the maze walls
+ * @wall_texture: Texture to use for rendering maze floor
  *
  * Return: nothing
  */

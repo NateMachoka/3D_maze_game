@@ -1,7 +1,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include "timer.h"
 #include "init.h"
 #include <stdio.h>
+
+SDL_Color textColor;
+TTF_Font *font = NULL;
 
 /**
  * init_sdl - Initializes SDL and creates the window and renderer
@@ -47,6 +51,7 @@ int init_sdl(SDL_Window **window, SDL_Renderer **renderer)
 
     return 0;
 }
+
 /**
  * init_audio - Initializes SDL_mixer for audio
  *
@@ -60,4 +65,37 @@ int init_audio()
         return 1;
     }
     return 0;
-} 
+}
+
+/**
+ * init_ttf - Initializes SDL_ttf for font rendering
+ *
+ * Return: 0 on success, 1 on error
+ */
+int init_ttf()
+{
+    if (TTF_Init() == -1)
+    {
+        printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * load_font - Loads a font from file
+ * @path: Path to the font file
+ * @size: Size of the font
+ *
+ * Return: Pointer to the loaded font, or NULL if failed
+ */
+TTF_Font *load_font(const char *path, int size)
+{
+    TTF_Font *font = TTF_OpenFont(path, size);
+    if (font == NULL)
+    {
+        printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+    }
+    return font;
+}
+
