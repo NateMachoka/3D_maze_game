@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include "timer.h"
 #include "init.h"
 #include <stdio.h>
@@ -98,4 +99,3 @@ TTF_Font *load_font(const char *path, int size)
     }
     return font;
 }
-

@@ -6,6 +6,7 @@
 #include "render.h"
 #include "cleanup.h"
 #include "player.h"
-#include "position.h"
+
+void restart_game(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], SDL_Texture *wall_texture, const int tile_size);
 
 #endif /* MAIN_H */

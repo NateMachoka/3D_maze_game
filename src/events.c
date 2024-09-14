@@ -63,7 +63,7 @@ void handle_movement(Player *player, const Uint8 *state, int maze[MAZE_HEIGHT][M
  *
  * Return: nothing
  */
-void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size, SDL_Texture *wall_texture)
+int event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_size, SDL_Texture *wall_texture)
 {
 	int running;
 	SDL_Event event;
@@ -77,7 +77,7 @@ void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MA
 		{
 			if (event.type == SDL_QUIT)
 			{
-				running = 0;
+				return (1);
 			}
 		}
 
@@ -87,6 +87,12 @@ void event_loop(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MA
 		handle_rotation(player, state);
 		handle_movement(player, state, maze, tile_size);
 
+		if (update_timer_and_check_maze_completion(player, maze, renderer, wall_texture, tile_size))
+		{
+			return (0); /* the round is finished, restart */
+		}
+
 		render(renderer, maze, tile_size, player, wall_texture);
 	}
+	return (0);
 }

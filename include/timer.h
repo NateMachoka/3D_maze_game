@@ -6,13 +6,15 @@
 #include "config.h"
 #include "player.h"
 #include "maze.h"
+#include "init.h"
+#include "main.h"
 
 void start_game();
-void update_timer_and_check_maze_completion(Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], SDL_Renderer *renderer);
+int update_timer_and_check_maze_completion(Player *player, int maze[MAZE_HEIGHT][MAZE_WIDTH], SDL_Renderer *renderer, SDL_Texture *wall_texture, int tile_size);
 void display_message(const char *message, SDL_Renderer *renderer);
+void display_timer(SDL_Renderer *renderer, Uint32 start_time);
 
 extern SDL_Renderer *renderer;
-extern TTF_Font *font;
-extern SDL_Color textColor;
+extern Uint32 start_time;
 
 #endif // TIMER_H

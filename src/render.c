@@ -145,6 +145,7 @@ void render(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_
     map_y = 10; // Draw the 2D minimap
 
     draw_map(renderer, maze, map_x, map_y, map_tile_size, player->pos.x / tile_size, player->pos.y / tile_size, player->angle);
+    display_timer(renderer, start_time);
 
     SDL_RenderPresent(renderer);
 }

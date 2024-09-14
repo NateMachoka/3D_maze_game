@@ -8,6 +8,8 @@
 #define PATH 0
 #define START 2
 #define END 3
+#define END_X (MAZE_WIDTH - 2)
+#define END_Y (MAZE_HEIGHT - 2)
 
 extern int maze[MAZE_HEIGHT][MAZE_WIDTH];
 
