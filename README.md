@@ -1,34 +1,35 @@
-3D Maze Game: The Maze
+# 3D Maze Game: The Maze
 
 A captivating 3D maze exploration game built using C, SDL2, and raycasting techniques (some aspects will be improved by OpenGL). Navigate an ancient Mayan-inspired maze in first-person view.
 
-Project Overview
-The Maze is a 3D first-person maze game designed to challenge your navigation skills and immerse you in a mysterious environment. Initially starting as a 2D maze,it has evolved into a fully immersive 3D experience using raycasting techniques. The game challenges players navigate through complex maze structures within a given time limit, with future plans to introduce traps, enemies, weapons, and other interactive elements as the development progresses.
+## Project Overview
 
-Features
-2D Maze Exploration: Start with a 2D top-down view of the maze.
-First-Person Perspective: Transition into a 3D first-person perspective using raycasting for enhanced immersion.
-Player Movement: Use the WASD keys to navigate the maze.
-Sound Effects: Enjoy a dynamic sound experience as you explore.
-Start Sound: start_sound.wav plays when the game begins.
-Congratulations Sound: congrats_sound.wav plays upon maze completion.
-Dynamic Rendering: Smooth rendering of the environment using SDL2.
-Basic Trap Interaction (Planned): Enemies and other dynamic elements will be introduced in future updates.
+The Maze is a 3D first-person maze game designed to challenge your navigation skills and immerse you in a mysterious environment. Initially starting as a 2D maze, it has evolved into a fully immersive 3D experience using raycasting techniques. The game challenges players to navigate through complex maze structures within a given time limit, with future plans to introduce traps, enemies, weapons, and other interactive elements as the development progresses.
 
-Deployed game: https://www.youtube.com/watch?v=I0QVUDr8rtU
-Blog Article: [add blog link when finished]
+## Features
 
-Project Structure
-makefile
+- **2D Maze Exploration**: Start with a 2D top-down view of the maze.
+- **First-Person Perspective**: Transition into a 3D first-person perspective using raycasting for enhanced immersion.
+- **Player Movement**: Use the WASD keys to navigate the maze.
+- **Sound Effects**: Enjoy a dynamic sound experience as you explore.
+  - *Start Sound*: `start_sound.wav` plays when the game begins.
+  - *Congratulations Sound*: `congrats_sound.wav` plays upon maze completion.
+- **Dynamic Rendering**: Smooth rendering of the environment using SDL2.
+- **Basic Trap Interaction (Planned)**: Enemies and other dynamic elements will be introduced in future updates.
+
+[Deployed game](https://www.youtube.com/watch?v=I0QVUDr8rtU)
+[Blog Article](#add-blog-link-when-finished)
+
+## Project Structure
 
 3d_maze_game/
 ├── assets/               # Game assets (textures, sounds, fonts, etc.)
-│   ├── Mayan_goddess     # Textures related to the Mayan goddess
+│   ├── Mayan_goddess     # Unused texture (for now)
 │   ├── Mayan_wall        # Wall textures for the maze
 │   ├── Surabanglus.ttf   # Font used in the game
 │   ├── congrats_sound.wav # Sound effect for game completion
 │   ├── congrats_sound.wav~# Backup/hidden version of the sound file
-│   ├── floor_plan        # Image/asset related to the maze's floor plan
+│   ├── floor_plan        # Image/asset related to the maze's floor
 │   ├── mesy_guako.ttf    # Additional font used in the game
 │   ├── mesy_guako.zip    # Compressed version of mesy_guako.ttf
 │   ├── start_sound.wav   # Sound effect for game start
@@ -59,27 +60,29 @@ makefile
 ├── README.md             # Project documentation (this file)
 └── LICENSE               # License information for the project
 
-Challenges and Solutions
-1. Raycasting the Mayan Wall Texture Sharpness, Depth, and Removing the Fish-Eye Effect
-Challenge: The walls appeared blurry and lacked depth, with a fish-eye effect at certain angles. Solution: I optimized the raycasting technique by adding vertical resolution functionality, improving the clarity of the walls, especially when close to the player. I also enhanced player movement calculations to ensure the smooth rendering of visuals.
 
-Code Snippet:
+## Challenges and Solutions
 
-/* Calculate perpendicular wall distance */
-if (side == 0) {
-    perpWallDist = (mapX - player->pos.x / tile_size + (1 - stepX) / 2) / rayDirX;
-} else {
-    perpWallDist = (mapY - player->pos.y / tile_size + (1 - stepY) / 2) / rayDirY;
-}
+1. **Raycasting the Mayan Wall Texture Sharpness, Depth, and Removing the Fish-Eye Effect**
 
-/* Calculate the top and bottom of the line */
-drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
-if (drawStart < 0) drawStart = 0;
-drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
-if (drawEnd >= WINDOW_HEIGHT) drawEnd = WINDOW_HEIGHT - 1;
+   **Challenge**: The walls appeared blurry and lacked depth, with a fish-eye effect at certain angles.  
+   **Solution**: Optimized the raycasting technique by adding vertical resolution functionality, improving wall clarity, and enhancing player movement calculations.
 
-2. Maze Going Out of Bounds and Rendering Issues
-Challenge: The maze occasionally exceeded its bounds, causing rendering glitches. Solution: I added boundary checks for both vertical and horizontal alignment to ensure that all wall edges are clearly rendered and do not exceed the screen boundaries, which improved the clarity and accuracy of the map.
+   /* Calculate perpendicular wall distance */
+   if (side == 0) {
+       perpWallDist = (mapX - player->pos.x / tile_size + (1 - stepX) / 2) / rayDirX;
+   } else {
+       perpWallDist = (mapY - player->pos.y / tile_size + (1 - stepY) / 2) / rayDirY;
+   }
+   /* Calculate the top and bottom of the line */
+   drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
+   if (drawStart < 0) drawStart = 0;
+   drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
+   if (drawEnd >= WINDOW_HEIGHT) drawEnd = WINDOW_HEIGHT - 1;
+
+2. ** Maze Going Out of Bounds and Rendering Issues **
+   ** Challenge **: The maze occasionally exceeded its bounds, causing rendering glitches.
+   ** Solution **: I added boundary checks for both vertical and horizontal alignment to ensure that all wall edges are clearly rendered and do not exceed the screen boundaries, which improved the clarity and accuracy of the map.
 
 Code Snippet:
 bool in_bounds(int x, int y) {
@@ -100,8 +103,9 @@ while (!hit) {
     if (maze[mapY][mapX] > 0) hit = 1; /* Wall hit */
 }
 
-3. Creating a Good Static 2D Map That’s Immersive and Challenging
-Challenge: The static 2D map lacked immersion and complexity, which made gameplay feel repetitive. Solution: I replaced the static map with a dynamic one, using DFS and BFS algorithms to generate procedurally designed mazes. This improved both the immersion and the challenge by ensuring that no two mazes are identical.
+3. ** Creating a Good Static 2D Map That’s Immersive and Challenging **
+   ** Challenge **: The static 2D map lacked immersion and complexity, which made gameplay feel repetitive.
+   ** Solution **: I replaced the static map with a dynamic one, using DFS and BFS algorithms to generate procedurally designed mazes. This improved both the immersion and the challenge by ensuring that no two mazes are identical.
 
 Code Snippet:
 /* Generate maze using DFS */
@@ -128,16 +132,16 @@ void carve_passages(int x, int y, int maze[MAZE_HEIGHT][MAZE_WIDTH]) {
     }
 }
 
-Installation
+## Installation
 
-To run the Mayan Maze Adventure on your local machine, follow these steps:
+** To run the Mayan Maze Adventure on your local machine, follow these steps **:
 
-Clone the repository:
-https://github.com/NateMachoka/3D_maze_game.git
+ ** Clone the repository **:
+git clone https://github.com/NateMachoka/3D_maze_game.git
 
-Navigate to the directory:
+ ** Navigate to the directory **:
 cd 3D_maze_game
-Install SDL2 and required dependencies:
+ ** Install SDL2 and required dependencies **:
 Ensure you have SDL2 and related libraries installed on your system.
 
 For Ubuntu users:
