@@ -127,9 +127,8 @@ void render(SDL_Renderer *renderer, int maze[MAZE_HEIGHT][MAZE_WIDTH], int tile_
 	int map_x, map_y;
 
 	/* Get screen dimensions */
-	SDL_GetRendererOutputSize(renderer, &screen_width, &screen_height)
-
-		clear_screen(renderer);
+	SDL_GetRendererOutputSize(renderer, &screen_width, &screen_height);
+	clear_screen(renderer);
 
 	/* Render the 3D view (main view) */
 	cast_rays(renderer, player, maze, tile_size, wall_texture);

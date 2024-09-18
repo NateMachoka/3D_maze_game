@@ -20,8 +20,8 @@ void cast_rays(SDL_Renderer *renderer, Player *player, int maze[MAZE_HEIGHT][MAZ
 	float cameraX, rayDirX, rayDirY, sideDistX, sideDistY, perpWallDist;
 	float deltaDistX, deltaDistY, texPos, step;
 
-	int textureWidth = 1024;
-	int textureHeight = 1024;
+	int textureWidth = 512;
+	int textureHeight = 512;
 
 	for (x = 0; x < WINDOW_WIDTH; x++)
 	{

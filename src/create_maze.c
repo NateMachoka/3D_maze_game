@@ -24,7 +24,7 @@ int** create_maze(int height, int width)
 
 	for (i = 0; i < height; i++)
 	{
-		maze[i] = malloc(width * sizeof(int))
+		maze[i] = malloc(width * sizeof(int));
 
 			if (maze[i] == NULL)
 			{
